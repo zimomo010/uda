@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>uda-web · Sign in</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f5f7ff, #e8edff);
+    }
+
+    .login-card {
+      width: 360px;
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 28px 24px;
+      box-shadow: 0 10px 30px rgba(36, 64, 161, 0.15);
+    }
+
+    .title {
+      font-size: 24px;
+      margin-bottom: 18px;
+      color: #1f2d5a;
+      text-align: center;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .label {
+      display: block;
+      font-size: 14px;
+      color: #334166;
+      margin-bottom: 6px;
+    }
+
+    .input {
+      width: 100%;
+      height: 40px;
+      border: 1px solid #ced7f2;
+      border-radius: 8px;
+      padding: 0 12px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .input:focus {
+      border-color: #4b73ff;
+    }
+
+    .login-btn {
+      margin-top: 8px;
+      width: 100%;
+      height: 42px;
+      border: none;
+      border-radius: 8px;
+      background: #4b73ff;
+      color: #ffffff;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .login-btn:hover:not(:disabled) {
+      background: #3a5de0;
+    }
+
+    .login-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .message {
+      min-height: 22px;
+      margin-top: 10px;
+      font-size: 13px;
+      color: #e23d3d;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <h1 class="title">Sign in</h1>
+
+    <div class="field">
+      <label for="username" class="label">Username</label>
+      <input id="username" class="input" type="text" placeholder="Enter username">
+    </div>
+
+    <div class="field">
+      <label for="password" class="label">Password</label>
+      <input id="password" class="input" type="password" placeholder="Enter password">
+    </div>
+
+    <button id="loginBtn" class="login-btn" type="button">Sign in</button>
+    <p id="message" class="message"></p>
+  </div>
+
+  <script>
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const loginBtn = document.getElementById("loginBtn");
+    const message = document.getElementById("message");
+
+    function randomAuthorizationValue() {
+      if (typeof crypto !== "undefined" && crypto.randomUUID) {
+        return crypto.randomUUID();
+      }
+      const bytes = new Uint8Array(16);
+      if (typeof crypto !== "undefined" && crypto.getRandomValues) {
+        crypto.getRandomValues(bytes);
+      } else {
+        for (let i = 0; i < bytes.length; i++) {
+          bytes[i] = Math.floor(Math.random() * 256);
+        }
+      }
+      return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+    }
+
+    const LOGIN_URL = "http://uda.benefitunion.cn/api/web/uda/login";
+
+    loginBtn.addEventListener("click", async () => {
+      const userName = usernameInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!userName || !password) {
+        message.style.color = "#e23d3d";
+        message.textContent = "Username and password are required.";
+        return;
+      }
+
+      message.style.color = "#334166";
+      message.textContent = "Signing in…";
+      loginBtn.disabled = true;
+
+      try {
+        const authorization = randomAuthorizationValue();
+        const response = await fetch(LOGIN_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: authorization,
+          },
+          body: JSON.stringify({ userName, password }),
+        });
+
+        const text = await response.text();
+        let data = null;
+        try {
+          data = text ? JSON.parse(text) : null;
+        } catch {
+          data = null;
+        }
+
+        function apiErrorText(payload) {
+          if (typeof payload !== "object" || payload === null) {
+            return "Sign-in failed.";
+          }
+          return String(
+            payload.message ||
+              payload.msg ||
+              payload.errorMsg ||
+              ("Error (code: " + payload.code + ")")
+          );
+        }
+
+        if (typeof data === "object" && data !== null && "code" in data) {
+          const codeNum = Number(data.code);
+          const ok = data.code === 0 || data.code === "0" || codeNum === 0;
+          if (ok) {
+            window.location.href = "home.html";
+            return;
+          }
+          message.style.color = "#e23d3d";
+          message.textContent = apiErrorText(data);
+          return;
+        }
+
+        if (!response.ok) {
+          message.style.color = "#e23d3d";
+          message.textContent = text
+            ? String(text).slice(0, 200)
+            : "Sign-in failed (" + response.status + ").";
+          return;
+        }
+
+        message.style.color = "#e23d3d";
+        message.textContent = "Invalid response: missing code field.";
+      } catch (err) {
+        message.style.color = "#e23d3d";
+        message.textContent =
+          err instanceof TypeError
+            ? "Network error or request blocked (e.g. CORS). Serve the app from the same origin or enable CORS on the server."
+            : "Request error: " + (err && err.message ? err.message : String(err));
+      } finally {
+        loginBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
