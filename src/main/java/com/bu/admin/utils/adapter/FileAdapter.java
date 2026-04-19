@@ -7,12 +7,7 @@ import com.google.gson.stream.JsonWriter;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * 自定义处理File
- *
- * @author liujiegang
- * @date 2025/12/16
- */
+
 public class FileAdapter extends TypeAdapter<File> {
 
     @Override

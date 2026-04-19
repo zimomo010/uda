@@ -2,23 +2,21 @@
 <configuration>
     <contextName>ins-order-center</contextName>
 
-    <!--0. 日志格式和颜色渲染 -->
-    <!-- 彩色日志依赖的渲染类 -->
+    <!--0.log format and color -->
     <conversionRule conversionWord="clr" class="org.springframework.boot.logging.logback.ColorConverter" />
     <conversionRule conversionWord="wex" class="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
     <conversionRule conversionWord="wEx" class="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
-    <!-- 彩色日志格式 -->
+    <!-- log format -->
     <property name="CONSOLE_LOG_PATTERN" value="[TRACEID:%X{traceId}]%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
     <property name="FILE_LOG_PATTERN" value="[TRACEID:%X{traceId}]%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
-    <!--1. 输出到控制台-->
+    <!--1. to console-->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>info</level>
         </filter>
         <encoder>
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
-            <!-- 设置字符集 -->
             <charset>UTF-8</charset>
         </encoder>
     </appender>
@@ -27,25 +25,18 @@
     <property name="log.path" value="${LOG_HOME}" />
 
     <springProfile name="test,dev,pro,pro-tcloud">
-        <!--2. 输出到文档-->
-        <!-- 2.1 level为 DEBUG 日志，时间滚动输出  -->
+        <!--2. to file-->
         <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <!-- 正在记录的日志文档的路径及文档名 -->
             <file>${log.path}/debug.log</file>
-            <!--日志文档输出格式-->
             <encoder>
                 <pattern>${FILE_LOG_PATTERN}</pattern>
-                <charset>UTF-8</charset> <!-- 设置字符集 -->
+                <charset>UTF-8</charset>
             </encoder>
-            <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <!-- 日志归档 -->
                 <fileNamePattern>${log.path}/debug-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
                 <maxFileSize>100MB</maxFileSize>
-                <!--日志文档保留天数-->
                 <maxHistory>30</maxHistory>
             </rollingPolicy>
-            <!-- 此日志文档只记录debug级别的(针对开发习惯，很少使用debug级别，为避免debug和info大量重复日志，此处严格匹配) -->
             <filter class="ch.qos.logback.classic.filter.LevelFilter">
                 <level>debug</level>
                 <onMatch>ACCEPT</onMatch>
@@ -53,20 +44,16 @@
             </filter>
         </appender>
 
-        <!-- 2.2 level为 INFO 日志，时间滚动输出  -->
+        <!-- 2.2 info level  -->
         <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>${log.path}/info.log</file>
-            <!--日志文档输出格式-->
             <encoder>
                 <pattern>${FILE_LOG_PATTERN}</pattern>
                 <charset>UTF-8</charset>
             </encoder>
-            <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <!-- 日志归档 -->
                 <fileNamePattern>${log.path}/info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
                 <maxFileSize>100MB</maxFileSize>
-                <!--日志文档保留天数-->
                 <maxHistory>30</maxHistory>
             </rollingPolicy>
             <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -74,21 +61,16 @@
             </filter>
         </appender>
 
-        <!-- 2.3 level为 WARN 日志，时间滚动输出  -->
+        <!-- 2.3 level WARN  -->
         <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <!-- 正在记录的日志文档的路径及文档名 -->
             <file>${log.path}/warn.log</file>
-            <!--日志文档输出格式-->
             <encoder>
                 <pattern>${FILE_LOG_PATTERN}</pattern>
                 <charset>UTF-8</charset>
             </encoder>
-            <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <!-- 日志归档 -->
                 <fileNamePattern>${log.path}/warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
                 <maxFileSize>100MB</maxFileSize>
-                <!--日志文档保留天数-->
                 <maxHistory>30</maxHistory>
             </rollingPolicy>
             <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -96,21 +78,16 @@
             </filter>
         </appender>
 
-        <!-- 2.4 level为 ERROR 日志，时间滚动输出  -->
+        <!-- 2.4 level error -->
         <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <!-- 正在记录的日志文档的路径及文档名 -->
             <file>${log.path}/error.log</file>
-            <!--日志文档输出格式-->
             <encoder>
                 <pattern>${FILE_LOG_PATTERN}</pattern>
-                <charset>UTF-8</charset> <!-- 此处设置字符集 -->
+                <charset>UTF-8</charset>
             </encoder>
-            <!-- 日志记录器的滚动策略，按日期，按大小记录 -->
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <!-- 日志归档 -->
                 <fileNamePattern>${log.path}/error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
                 <maxFileSize>100MB</maxFileSize>
-                <!--日志文档保留天数-->
                 <maxHistory>30</maxHistory>
             </rollingPolicy>
             <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -119,16 +96,14 @@
         </appender>
     </springProfile>
 
-    <!-- 3. 最终的策略 -->
-    <!-- 3.1 开发环境:打印控制台-->
+    <!-- 3. dev -->
     <springProfile name="dev">
         <root level="debug">
             <appender-ref ref="CONSOLE" />
         </root>
     </springProfile>
 
-    <!-- 3.2 生产环境:输出到文档 -->
-    <springProfile name="test,dev,pro,pro-tcloud">
+    <springProfile name="test,dev,pro">
         <root level="info">
             <appender-ref ref="CONSOLE" />
             <appender-ref ref="DEBUG_FILE" />

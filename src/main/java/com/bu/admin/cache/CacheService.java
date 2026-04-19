@@ -17,12 +17,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-/**
- * 缓存服务
- */
+
 public enum CacheService {
 
-    INST; // 单例
+    INST;
 
     private static final int THRESHOLD_VALUE = 300;
     private static final Logger logger = LoggerFactory.getLogger(CacheService.class);
@@ -31,9 +29,7 @@ public enum CacheService {
     private RedisTemplate<String, String> redisTemplate;
     private StringRedisTemplate stringRedisTemplate;
 
-    /**
-     * 缓存初始化
-     */
+
     CacheService() {
         this.myRedisDao = ServiceLocator.getBean(IMyRedisDao.class);
         this.redisTemplate = ServiceLocator.getBean(RedisTemplate.class, "redisTemplate");
@@ -52,59 +48,26 @@ public enum CacheService {
     }
 
 
-    /**
-     * 执行redis dao层方法
-     * @param region
-     * @param key
-     * @param command
-     * @return
-     */
     public <T> T execute(String region, String key, MyRedisCommand<T> command) {
         String redisKey = this.getRedisKey(region, key);
         return command.execute(redisKey, myRedisDao);
     }
 
-    /**
-     * 执行redis dao层方法
-     * @param regionKey
-     * @param command
-     * @return
-     */
     public <T> T execute(String regionKey, MyRedisCommand<T> command) {
         String redisKey = this.getRedisKey(regionKey);
         return command.execute(redisKey, myRedisDao);
     }
 
 
-    /**
-     * 执行单资源锁获取
-     * @param region
-     * @param key
-     * @param expire
-     */
     public boolean acquireSingleLock(String region, String key, long expire) {
         return myRedisDao.acquireLock(getRedisKey(region, key),   (int) expire);
     }
 
 
-    /**
-     * 执行redis pipeline
-     * @param pipeline
-     * @return
-     */
     public List<Object> executePipeline(MyRedisPipeline pipeline) {
         return myRedisDao.executePipeline(pipeline);
     }
 
-
-    /**
-     * 获取缓存数据，不支持集合和map
-     * @param region
-     * @param key
-     * @param clazz
-     * @param <T>
-     * @return
-     */
     public <T> T getObject(String region, String key, Class<T> clazz) {
         if (clazz == null) {
             throw new CacheException(ErrorCodes.CACHE.EMPTY_CLASS_OBJECT);
@@ -128,7 +91,7 @@ public enum CacheService {
 
         Class<?> clazz = value.getClass();
         if (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)) {
-            throw new CacheException(ErrorCodes.CACHE.GET_UNSUPPORTED_COLLECTION_OR_MAP, "获取缓存数据不支持的类型:" + clazz.getName());
+            throw new CacheException(ErrorCodes.CACHE.GET_UNSUPPORTED_COLLECTION_OR_MAP, "not support type:" + clazz.getName());
         }
 
         String redisKey = getRedisKey(region, key);
@@ -224,7 +187,6 @@ public enum CacheService {
 
         if (keys.size() <= THRESHOLD_VALUE) {
             myRedisDao.del(keys.stream().toArray(String[]::new));
-            // 管道方式执行删除目前存在位置问题
         } else {
             List<String> list = new ArrayList<>();
             for (String key : keys) {
@@ -241,11 +203,7 @@ public enum CacheService {
         }
     }
 
-    /**
-     * 获取底层key
-     * @param regionKey
-     * @return
-     */
+
     public String getRedisKey(String regionKey) {
 
         if (StringUtils.isEmpty(regionKey)) {
@@ -255,12 +213,7 @@ public enum CacheService {
         return CACHE + regionKey + ":UNQ";
     }
 
-    /**
-     * 获取底层key
-     * @param region
-     * @param key
-     * @return
-     */
+
     public String getRedisKey(String region, String key) {
 
         if (StringUtils.isEmpty(region)) {

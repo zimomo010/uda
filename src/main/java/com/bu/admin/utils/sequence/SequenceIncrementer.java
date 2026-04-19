@@ -8,21 +8,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * 序列发生器,维护多个实际发生器的实例
- * Created by ghostWu on 15/8/19.
- */
+
 @Service("sequenceIncrementer")
 public class SequenceIncrementer {
 
     private final Map<String, SerialNumberCache> serialNumberCacheMap = new HashMap<>();
 
-    /**
-     * 获取序列值
-     *
-     * @param seqName
-     * @return
-     */
+
     long nextValue(String seqName) {
         SerialNumberCache serialNumberCache = serialNumberCacheMap.get(seqName);
         if (serialNumberCache == null) {

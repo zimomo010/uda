@@ -2,14 +2,11 @@ package com.bu.admin.utils;
 
 import com.bu.admin.extend.exception.BasicException;
 import com.bu.admin.extend.exception.ErrorCodes;
-import com.bu.admin.feign.bo.transaction.Transaction;
-import com.bu.admin.feign.bo.transaction.TransactionProduct;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.Converter;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.converters.BigDecimalConverter;
 import org.apache.commons.beanutils.converters.DateConverter;
-import org.apache.commons.collections4.list.GrowthList;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -167,7 +164,7 @@ public class BeanCopyUtils {
         // 获取类的所有字段
         List<String> ignoreList = Arrays.asList(ignoreProperties);
         Field[] fields = object.getDeclaredFields();
-        List<String> attributesArray = new GrowthList<>();
+        List<String> attributesArray = new ArrayList<>();
         for (int i = 0; i < fields.length; i++) {
             Field field = fields[i];
             if (!ignoreList.contains(field.getName())) {
@@ -211,13 +208,5 @@ public class BeanCopyUtils {
         return emptyNames.toArray(result);
     }
 
-    public static void main(String[] args) {
-        TransactionProduct transaction = new TransactionProduct();
-        transaction.setId("123");
-        transaction.setCusTemplateId(123);
-
-        Transaction transaction1 = convertBusinessValue(transaction, Transaction.class, "transSn");
-        logger.info("get t1 is {}",transaction1);
-    }
 
 }

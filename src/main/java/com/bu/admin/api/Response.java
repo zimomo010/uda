@@ -5,48 +5,28 @@ import com.bu.admin.extend.exception.ErrorCodes;
 import com.bu.admin.utils.JSONUtils;
 import com.google.gson.JsonObject;
 
-/**
- * webservice接口响应实体
- * Created by ghostWu on 15/8/19.
- */
+
 public class Response {
 
     private Response() {
     }
 
-    private JsonObject resultJson; // 实际的响应内容
+    private JsonObject resultJson;
 
-    /**
-     * 构造最终的响应内容
-     *
-     * @return
-     */
     public String build() {
         return resultJson.toString();
     }
 
-
-    /**
-     * 接口调用成功
-     *
-     * @return
-     */
     public static Response ok() {
         return ok(null);
     }
 
-    /**
-     * 接口调用成功
-     *
-     * @param result
-     * @return
-     */
     public static Response ok(Object result) {
 
         JsonObject resultJson = new JsonObject();
         resultJson.addProperty("code", ErrorCodes.NO_ERROR.getCode());
-        resultJson.addProperty("message", "交互成功");
-        resultJson.addProperty("detailMessage", "交互成功");
+        resultJson.addProperty("message", "success");
+        resultJson.addProperty("detailMessage", "success");
 
         if (result != null) {
             JsonObject r = new JsonObject();
@@ -61,12 +41,6 @@ public class Response {
     }
 
 
-    /**
-     * 接口调用失败
-     *
-     * @param errorCode
-     * @return
-     */
     public static Response error(ErrorCode errorCode) {
         JsonObject resultJson = new JsonObject();
         resultJson.addProperty("code", errorCode.getCode());
@@ -78,11 +52,7 @@ public class Response {
         return response;
     }
 
-    /**
-     * 设置接口描述信息
-     * @param detailMsg
-     * @return
-     */
+
     public Response message(String detailMsg) {
         resultJson.addProperty("detailMessage", detailMsg);
         return this;

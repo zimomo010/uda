@@ -10,24 +10,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-/**
- * @ClassName RedisClusterPropertyConfigurer
- * @Description redis集群配置类
- * @Author ghostWu
- * @Date 2018/10/19
- */
+
 public class RedisClusterPropertyConfigurer extends PropertyPlaceholderConfigurer {
 
     private static final Map<String, String> propertiesCopy = new HashMap<>();
 
-
-    /**
-     * 重载处理类的方法 用于得到配置文件的拷贝
-     *
-     * @param beanFactoryToProcess
-     * @param props
-     * @throws BeansException
-     */
     @Override
     protected void processProperties(ConfigurableListableBeanFactory beanFactoryToProcess, Properties props) throws BeansException {
         super.processProperties(beanFactoryToProcess, props);
@@ -75,11 +62,6 @@ public class RedisClusterPropertyConfigurer extends PropertyPlaceholderConfigure
         return propertiesCopy.containsKey(key);
     }
 
-    /**
-     * 得到所有配置 不可变
-     *
-     * @return
-     */
     public static Map<String, String> getPropMapCopy() {
         return Collections.unmodifiableMap(propertiesCopy);
     }

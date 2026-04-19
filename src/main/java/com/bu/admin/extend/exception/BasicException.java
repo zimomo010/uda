@@ -4,11 +4,7 @@ package com.bu.admin.extend.exception;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
-/**
- *
- * @author ghostWu
- * @date 15/5/4
- */
+
 @Getter
 public class BasicException extends RuntimeException {
 

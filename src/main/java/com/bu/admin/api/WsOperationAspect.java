@@ -4,7 +4,6 @@ import com.auth0.jwt.interfaces.Claim;
 import com.bu.admin.extend.exception.BasicException;
 import com.bu.admin.extend.exception.ErrorCodes;
 import com.bu.admin.utils.JSONUtils;
-import com.bu.admin.utils.codec.RSACoder;
 import com.google.gson.JsonObject;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
@@ -23,33 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Arrays;
 import java.util.Map;
 
-
-/**
- * Created by ghostWu on 2017/5/4.
- */
 @Aspect
 @Component
 public class WsOperationAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(WsOperationAspect.class);
-
-    private static final String PRIVATEKEY = """
-            MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAKj1k0J/zSebgh16
-            JpLvSMNyk5LuQD35JdjPZG975D4pq9XyqadI4c0chKo/JwsK78U28Ps9b845ThIr
-            Ksa+RC6+Wqpg1qsOV9pAwImiE4jjUZKiYPDcyagi2troOazZnPT4M+HvVUYUaqeQ
-            SnUxzP0+LJ3Aa/IF/XdwMkV4XqQRAgMBAAECgYA7a2IGmPuFWmNACp1WP2DPm5Pa
-            sH9XTC/LN+SScHeshOsxqs2PT0pZ4BWn6d3JPGdmbBQDx29yjyStrxC0JGXFl+tR
-            bb4wnOZJtL0GGAv3ffQZ9kHkZuT9KMfIGOL0vmpESHJh+j/hjzD66Vshu/j+DJH6
-            n5sfi67Mn5j/CPFXIQJBAOAY2JPN+AAh9jkAn383OvjTv5dcDwnbexOJOCCAVEBD
-            MmKbx5ZMAhxAkSClNEdewV3vQurM+Sb4bPOaF1QrG9cCQQDBAz+eHwVkgP3D9xBg
-            rtBtVufPQ39cShlbrpJVgezMizlbfu3eCTkjlniZKfkg3stoou2y/csIn6aKCdhI
-            c4JXAkEAyxr5wAxfh49AYC2GYYCnPDp+XSqcnqyEAhLOAfcNZSkCE4lo/XlqODz0
-            zAevODhTPVXK6pBYCNADv02bczeXBQJAetlHd6wE8ahMXJt3WCJMVRuYZcpvWN1s
-            8HbXewc8IiCHPF44pjc2oBkY31vgznQgAZSaOG/i97Ut+fQ0LkEe9wJBAKTOv5pP
-            kIw3QTrvxbtVByC/q8WW1VRtn4iHXj6lPKv0Wf3Q3mAnoUhzDCtBI4Yd7LL/nrS9
-            zRYUEo3JAW8VX0k=
-            """;
-
     @Resource
     private WsOperationCache wsOperationCache;
 
@@ -58,10 +35,8 @@ public class WsOperationAspect {
 
         MethodSignature methodSignature = (MethodSignature) point.getSignature();
 
-        // 接口调用需要进行处理
         WsOperation operationAnnotation = methodSignature.getMethod().getAnnotation(WsOperation.class);
 
-        // 调用序列
         long callSN = 1985;
         String interfaceName = "unknown-interface";
         boolean hasError = false;
@@ -119,17 +94,12 @@ public class WsOperationAspect {
     //--------------------------------------------------------------------------------------------------------------
     //--------------------------------------------private methods---------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------
-
-    // 校验用户token
     private void checkUserToken(WsOperation wsOperation) {
         if (StringUtils.isNotEmpty(WsContext.getContext().getToken())) {
-            // 先判断是否存在token，支持潜在的登陆用户非必登陆需求
             String token = WsContext.getContext().getToken();
             if (wsOperationCache.userTokenExists(token)) {
                 try {
-                    Map<String, Claim> params = JWTUtils.verify(token);
-                    WsContext.getContext().setUserId(params.get("identifier").asString());
-                    WsContext.getContext().setUserInfo(params);
+                    //do nothing
                 } catch (Exception e) {
                     // ignore
                     logger.error("check token failed", e);
@@ -141,24 +111,15 @@ public class WsOperationAspect {
             if (WsContext.getContext().getUserInfo() == null) {
                 throw new ApiException(ErrorCodes.ApiEntrance.INVALID_TOKEN);
             }
-
-            if (!wsOperationCache.checkPermission()) {
-                throw new ApiException(ErrorCodes.ApiEntrance.INVALID_PURVIEW);
-            }
         }
     }
 
-    // 校验用户serverToken
     private void checkServerToken(WsOperation wsOperation) {
         if (wsOperation.serverTokenNeeded()) {
-            // 判断server token
             String serverToken = WsContext.getContext().getToken();
             String serverName = WsContext.getContext().getServerName();
             if (StringUtils.isEmpty(serverToken) || StringUtils.isEmpty(serverName)) {
                 throw new ApiException(ErrorCodes.ApiEntrance.INVALID_SERVER_TOKEN);
-            }
-            if (!RSACoder.decrypt(serverToken, PRIVATEKEY, "utf-8").equals(serverName)) {
-                throw new ApiException(ErrorCodes.ApiEntrance.INVALID_SIGN);
             }
         }
     }

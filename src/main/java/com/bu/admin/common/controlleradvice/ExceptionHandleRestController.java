@@ -14,25 +14,14 @@ import org.springframework.web.context.request.NativeWebRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * rest controller 统一异常处理
- *
- * @author liujiegang
- * @date 2024/5/24 15:21
- */
+
 @Slf4j
 @RestControllerAdvice
 public class ExceptionHandleRestController {
 
-    /**
-     * 参数校验(Valid)异常，将校验失败的所有异常组合成一条错误信息
-     *
-     * @param e 异常
-     * @return 异常结果
-     */
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public String handleValidException(MethodArgumentNotValidException e, NativeWebRequest request) {
-        log.error("参数绑定校验异常", e);
+        log.error("handel valid error", e);
 
         BindingResult bindingResult = e.getBindingResult();
 

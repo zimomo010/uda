@@ -7,22 +7,13 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 
-/**
- * Created by ghostWu on 2017/4/25.
- */
+
 public class AopTargetUtils {
 
     private AopTargetUtils() {
         throw new IllegalStateException("Utility class");
     }
 
-    /**
-     * 获取 目标对象
-     *
-     * @param proxy 代理对象
-     * @return
-     * @throws Exception
-     */
     public static Object getTarget(Object proxy) throws Exception {
 
         if (!AopUtils.isAopProxy(proxy)) {

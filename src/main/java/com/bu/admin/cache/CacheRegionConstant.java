@@ -2,13 +2,7 @@ package com.bu.admin.cache;
 
 import lombok.Getter;
 
-/**
- * Created with IntelliJ IDEA.
- * User: ghost
- * Date: 14-3-20
- * Time: 上午11:42
- * To change this template use File | Settings | File Templates.
- */
+
 @Getter
 public enum CacheRegionConstant {
 

@@ -3,9 +3,7 @@ package com.bu.admin.system;
 import com.bu.admin.extend.exception.BasicException;
 import com.bu.admin.extend.exception.ErrorCode;
 
-/**
- * Created by ghostWu on 2017/5/19.
- */
+
 public class InitException extends BasicException {
     public InitException(ErrorCode errorCode) {
         super(errorCode);

@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
-            <version>11.0.15</version>
+            <version>11.0.21</version>
             <exclusions>
                 <exclusion>
                     <artifactId>tomcat-annotations-api</artifactId>
@@ -80,33 +80,6 @@
             <version>1.11.0</version>
         </dependency>
 
-        <!-- openfeign -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-
-        <!--阿里oss-->
-<!--        <dependency>-->
-<!--            <groupId>com.aliyun.oss</groupId>-->
-<!--            <artifactId>aliyun-sdk-oss</artifactId>-->
-<!--            <version>2.8.3</version>-->
-<!--            <exclusions>-->
-<!--            <exclusion>-->
-<!--                <groupId>org.jdom</groupId>-->
-<!--                <artifactId>jdom</artifactId>-->
-<!--            </exclusion>-->
-<!--            </exclusions>-->
-<!--        </dependency>-->
-
-        <!-- Source: https://mvnrepository.com/artifact/com.google.guava/guava -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>33.5.0-jre</version>
-            <scope>compile</scope>
-        </dependency>
-
         <!--json-->
         <dependency>
             <groupId>net.sf.json-lib</groupId>
@@ -114,12 +87,6 @@
             <version>2.4</version>
             <classifier>jdk15</classifier>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>org.apache.httpcomponents</groupId>-->
-<!--            <artifactId>httpmime</artifactId>-->
-<!--            <version>4.5.14</version>-->
-<!--        </dependency>-->
 
         <!-- gson -->
         <dependency>
@@ -135,7 +102,6 @@
             <version>4.5.1</version>
         </dependency>
 
-        <!-- 整合redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
@@ -151,15 +117,18 @@
             <optional>true</optional>
         </dependency>
 
-        <!--数据库-->
+        <!--data base-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-<!--        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.3</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -171,7 +140,6 @@
             <version>1.14</version>
         </dependency>
 
-        <!--在线生成接口文档-->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
@@ -181,13 +149,6 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
             <version>2.10.0</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.belerweb/pinyin4j -->
-        <dependency>
-            <groupId>com.belerweb</groupId>
-            <artifactId>pinyin4j</artifactId>
-            <version>2.5.0</version>
         </dependency>
 
         <dependency>
@@ -202,119 +163,31 @@
             <version>5.1.7.RELEASE</version>
         </dependency>
 
-        <!-- POI 处理excel表格-->
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>5.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>5.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml-schemas</artifactId>
-            <version>4.1.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.deepoove</groupId>
-            <artifactId>poi-tl</artifactId>
-            <version>1.12.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jxls</groupId>
-            <artifactId>jxls</artifactId>
-            <version>2.14.0</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.opensagres.xdocreport</groupId>
-            <artifactId>fr.opensagres.poi.xwpf.converter.pdf-gae</artifactId>
-            <version>2.0.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.sourceforge.jexcelapi</groupId>
-            <artifactId>jxl</artifactId>
-            <version>2.6.12</version>
-        </dependency>
-
-<!--         https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream-->
+        <!--         https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream-->
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
             <version>1.4.21</version>
         </dependency>
 
-        <!--提供 单元测试 服务-->
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-csv -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.10.0</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <!--文件上传-->
         <dependency>
             <groupId>com.sun.jersey.contribs</groupId>
             <artifactId>jersey-multipart</artifactId>
             <version>1.19.4</version>
         </dependency>
-        <!-- 阿里cdn -->
-        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-cdn</artifactId>
-            <version>3.0.10</version>
-        </dependency>
-        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-core</artifactId>
-            <version>4.1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.tencentcloudapi</groupId>
-            <artifactId>tencentcloud-sdk-java</artifactId>
-            <version>3.1.896</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.ini4j</groupId>
-                    <artifactId>ini4j</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-
-        <!--腾讯Cos-->
-        <dependency>
-            <groupId>com.qcloud</groupId>
-            <artifactId>cos_api</artifactId>
-            <version>5.6.177</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>xstream</artifactId>
-                    <groupId>com.thoughtworks.xstream</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- pdf -->
-        <dependency>
-            <groupId>com.github.houbb</groupId>
-            <artifactId>opencc4j</artifactId>
-            <version>1.8.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.15.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.xhtmlrenderer</groupId>
-            <artifactId>flying-saucer-pdf-openpdf</artifactId>
-            <version>9.1.20</version>
-        </dependency>
-
 
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -342,7 +215,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>com.bu.admin.WebAdminApplication</mainClass>
-<!--                    <fork>true</fork>-->
+                    <!--                    <fork>true</fork>-->
                 </configuration>
                 <executions>
                     <execution>

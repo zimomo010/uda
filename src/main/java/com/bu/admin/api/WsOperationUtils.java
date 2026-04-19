@@ -11,9 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 
-/**
- * Created by ghostWu on 2017/5/4.
- */
+
 public class WsOperationUtils {
 
 
@@ -70,7 +68,6 @@ public class WsOperationUtils {
 
 
     private static void setGetParams(Object[] args, Annotation[][] parameterAnnotations, String[] parameterNames, JsonObject extraParams) {
-        // get请求
         for (int i = 0; i < args.length; i++) {
             Object arg = args[i];
             if (parameterAnnotations[i].length > 0 && parameterAnnotations[i][0] instanceof PathVariable pathVariable) {

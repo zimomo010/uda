@@ -12,7 +12,6 @@ import io.lettuce.core.cluster.RedisClusterClient;
 import io.lettuce.core.cluster.api.StatefulRedisClusterConnection;
 import io.lettuce.core.cluster.api.sync.RedisAdvancedClusterCommands;
 import jakarta.annotation.Resource;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -29,10 +28,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-/**
- * Redis key-value存取接口实现
- * @author ghostWu
- */
+
 @Repository("myRedisDao")
 public class MyRedisDaoImpl implements IMyRedisDao {
 
@@ -341,7 +337,7 @@ public class MyRedisDaoImpl implements IMyRedisDao {
 
     public String getType(final String key) {
         return redisTemplate.execute(new RedisCallback<String>() {
-            public String doInRedis(@NotNull RedisConnection connection) throws DataAccessException {
+            public String doInRedis(RedisConnection connection) throws DataAccessException {
                 DataType dataType = connection.type(Objects.requireNonNull(redisTemplate.getStringSerializer().serialize(key)));
                 return dataType.code();
             }

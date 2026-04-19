@@ -18,10 +18,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-/**
- * 系统初始化类
- * Created by ghostWu on 2017/4/25.
- */
+
 @Component
 public class SystemInitializer implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -43,7 +40,7 @@ public class SystemInitializer implements ApplicationListener<ContextRefreshedEv
                         Caller caller = new Caller();
                         try {
                             caller.obj = AopTargetUtils.getTarget(obj); // 获取被代理对象，因此初始化方法暂不支持事务环境
-                            // 扫描标记为Init注解的初始化方法
+                            //
                             caller.initMethod = Arrays.stream(caller.obj.getClass().getDeclaredMethods())
                                     .filter(m -> m.getAnnotation(Init.class) != null).findFirst().orElse(null);
                         } catch (Exception e) {
@@ -88,10 +85,10 @@ public class SystemInitializer implements ApplicationListener<ContextRefreshedEv
         }));
     }
 
-    // 调用对象
+
     private static class Caller {
-        private Object obj; // 实际对象
-        private Method initMethod; // 初始化方法
+        private Object obj; //
+        private Method initMethod; //
 
         @Override
         public String toString() {
